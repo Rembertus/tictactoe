@@ -1,0 +1,181 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    "version": "eosio::abi/1.1",
+    "types": [],
+    "structs": [
+        {
+            "name": "close",
+            "base": "",
+            "fields": [
+                {
+                    "name": "host",
+                    "type": "name"
+                },
+                {
+                    "name": "challenger",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "create",
+            "base": "",
+            "fields": [
+                {
+                    "name": "host",
+                    "type": "name"
+                },
+                {
+                    "name": "challenger",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "game",
+            "base": "",
+            "fields": [
+                {
+                    "name": "board",
+                    "type": "uint8[]"
+                },
+                {
+                    "name": "host",
+                    "type": "name"
+                },
+                {
+                    "name": "challenger",
+                    "type": "name"
+                },
+                {
+                    "name": "turn",
+                    "type": "name"
+                },
+                {
+                    "name": "winner",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "getwinner",
+            "base": "",
+            "fields": [
+                {
+                    "name": "host",
+                    "type": "name"
+                },
+                {
+                    "name": "challenger",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "move",
+            "base": "",
+            "fields": [
+                {
+                    "name": "host",
+                    "type": "name"
+                },
+                {
+                    "name": "challenger",
+                    "type": "name"
+                },
+                {
+                    "name": "by",
+                    "type": "name"
+                },
+                {
+                    "name": "row",
+                    "type": "uint8"
+                },
+                {
+                    "name": "column",
+                    "type": "uint8"
+                }
+            ]
+        },
+        {
+            "name": "restart",
+            "base": "",
+            "fields": [
+                {
+                    "name": "host",
+                    "type": "name"
+                },
+                {
+                    "name": "challenger",
+                    "type": "name"
+                },
+                {
+                    "name": "by",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "welcome",
+            "base": "",
+            "fields": [
+                {
+                    "name": "host",
+                    "type": "name"
+                },
+                {
+                    "name": "challenger",
+                    "type": "name"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "close",
+            "type": "close",
+            "ricardian_contract": "---\r\nspec_version: \"0.0.1\"\r\ntitle: close game\r\nsummary: 'Close a exists game'\r\nicon: \r\n---"
+        },
+        {
+            "name": "create",
+            "type": "create",
+            "ricardian_contract": "---\r\nspec_version: \"0.0.1\"\r\ntitle: Create game\r\nsummary: 'Create players challenger and host'\r\nicon: \r\n---"
+        },
+        {
+            "name": "getwinner",
+            "type": "getwinner",
+            "ricardian_contract": "---\r\nspec_version: \"0.0.1\"\r\ntitle: Winner\r\nsummary: 'Get a Winner from game'\r\nicon: \r\n---"
+        },
+        {
+            "name": "move",
+            "type": "move",
+            "ricardian_contract": "---\r\nspec_version: \"0.0.1\"\r\ntitle: Move player\r\nsummary: 'Move in board'\r\nicon: \r\n---"
+        },
+        {
+            "name": "restart",
+            "type": "restart",
+            "ricardian_contract": "---\r\nspec_version: \"0.0.1\"\r\ntitle: Restart Game\r\nsummary: 'Restart a game with player'\r\nicon: \r\n---"
+        },
+        {
+            "name": "welcome",
+            "type": "welcome",
+            "ricardian_contract": "---\r\nspec_version: \"0.0.1\"\r\ntitle: Welcome to contract\r\nsummary: 'Welcome to contract '\r\nicon:\r\n---"
+        }
+    ],
+    "tables": [
+        {
+            "name": "games",
+            "type": "game",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [
+        {
+            "id": "UserAgreement",
+            "body": "User agreement for the chain can go here."
+        }
+    ],
+    "variants": []
+}
