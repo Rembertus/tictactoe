@@ -10,6 +10,7 @@ CONTRACT tictactoe : public contract {
   const uint8_t VALUECHALLENGER = 5;
   const name    NONE = name("none");
   const name    NOWINNER = name("nowinner");
+  const uint64_t LIMITPLAYTIME = 30;            // 30 seconds
 
   public:
     using contract::contract;
@@ -20,14 +21,15 @@ CONTRACT tictactoe : public contract {
     ACTION restart (const name host, const name challenger, const name by);
     ACTION move (const name host, const name challenger, 
                  const name by, const uint8_t row, const uint8_t column);      
-    ACTION getwinner (const name host, const name challenger);
+    ACTION getwinner (const name host, const name challenger);    
   private:
     TABLE game {
       vector<uint8_t> board;
       name host;
       name challenger;
       name turn = host;
-      name winner = name("none");
+      uint32_t timeplay;          // Time limit for moves
+      name winner = name("none");      
 
       uint128_t primary_key() const { return host.value + challenger.value; }
       uint64_t by_challenger() const { return challenger.value; }
@@ -53,4 +55,5 @@ CONTRACT tictactoe : public contract {
     bool is_empty_cell (const uint8_t value);
     name get_winner (const name host, const name challenger);
     bool game_exists (const name host, const name challenger);
-};
+    uint32_t time_elapsed (uint32_t timeplay);
+}; 

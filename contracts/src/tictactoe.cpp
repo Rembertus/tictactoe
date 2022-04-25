@@ -1,4 +1,5 @@
 #include <tictactoe.hpp>
+#include <eosio/system.hpp>
 
 ACTION tictactoe::welcome (name host, name challenger) { 
   check(has_auth(name("tictactoe")), "User is not authorized to perform this action!");
@@ -18,6 +19,7 @@ ACTION tictactoe::create (const name host, const name challenger) {
     new_game.challenger = challenger;
     new_game.turn = host;
     new_game.winner = NONE;
+    new_game.timeplay = current_time_point().sec_since_epoch();
     new_game.board.assign ((BOARDWIDTH * BOARDWIDTH), 0);    // (BOARDWIDTH * BOARDWIDTH) is the length of the board.
   });
 }
@@ -56,14 +58,25 @@ ACTION tictactoe::move (const name host, const name challenger,
   check (itr->winner == NONE, "Info: The game is over.");
   check (itr->turn == by, "Warning: Not your move.");
   check (is_valid_movement(row, column, itr->board), "Warning: Invalid movement.");
-
+    
   name turn = (itr->turn == itr->host) ? itr->challenger : itr->host;
+
+  // Time limit for moves
+  if (time_elapsed (itr->timeplay) > LIMITPLAYTIME) {
+    print("Warning: Your time is end, you lost.\n");
+    print("Winner: ", turn);
+    _game.modify(itr, by, [&](auto& update_game) {
+      update_game.winner = turn;
+    });
+  }
+
   uint8_t value = (itr->turn == itr->host) ? VALUEHOST : VALUECHALLENGER;
   uint8_t position = (row * BOARDWIDTH) + column;
 
   _game.modify(itr, by, [&](auto& update_game) {
     update_game.board[position] = value;
     update_game.turn = turn;
+    update_game.timeplay = current_time_point().sec_since_epoch();
   });
   
   // Totalize values
@@ -118,6 +131,8 @@ ACTION tictactoe::move (const name host, const name challenger,
   }
 
   if (winner) {
+    print("Winner: ", namewinner);
+
     _game.modify(itr, by, [&](auto& update_game) {
       update_game.winner = namewinner;
     });
@@ -141,6 +156,7 @@ void tictactoe::restart_board (const name host, const name challenger) {
     _game.modify( itr, get_self(), [&] (auto& restart_game) {        
       restart_game.turn = host;
       restart_game.winner = NONE;
+      restart_game.timeplay = current_time_point().sec_since_epoch();
       restart_game.board.assign ((BOARDWIDTH * BOARDWIDTH), 0);
     });      
   }  
@@ -171,4 +187,9 @@ bool tictactoe::game_exists (const name host, const name challenger) {
   return (itr != _game.end());
 }
 
-EOSIO_DISPATCH(tictactoe, (welcome)(create)(close)(restart)(move)(getwinner))
+uint32_t tictactoe::time_elapsed (uint32_t timeplay) {
+  uint32_t now_seconds = current_time_point().sec_since_epoch();
+  return now_seconds - timeplay;    
+}
+
+EOSIO_DISPATCH(tictactoe, (welcome)(create)(close)(restart)(move)(getwinner)) 
